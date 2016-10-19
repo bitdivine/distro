@@ -98,6 +98,15 @@ elif [[ "$(uname)" == 'Linux' ]]; then
                         echo "${DISTRIB_ID,,} $DISTRIB_RELEASE") )"
         DISTRO="${DIST_VERS%% *}" # get our distro name
         VERSION="${DIST_VERS##* }" # get our version number
+    elif [[ -r /etc/debian_version ]]; then
+        # Install as for Ubuntu:
+        if grep -qE '^8[.]' /etc/debian_version ; then
+            DISTRO=ubuntu
+	    VERSION=14
+        else
+            echo '==> Unsupported version of Debian: ' $(cat /etc/debian_version)
+            exit 1
+        fi
     else # well, I'm out of ideas for now
         echo '==> Failed to determine distro and version.'
         exit 1
